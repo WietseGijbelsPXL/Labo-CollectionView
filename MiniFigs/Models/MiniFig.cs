@@ -11,5 +11,10 @@ namespace MiniFigs.Models
         public string Name { get; set; }
         public string ImageUrl { get; set; }
         public string Race { get; set; }
+
+        override public string ToString()
+        {
+            return $"{Name} ({Race})";
+        }
     }
 }

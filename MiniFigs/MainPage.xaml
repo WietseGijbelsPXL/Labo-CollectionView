@@ -1,11 +1,50 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="MiniFigs.MainPage">
+             xmlns:models="clr-namespace:MiniFigs.Models"
+             x:Class="MiniFigs.MainPage"
+             Background="White">
 
-    <Grid>
-        <!--Add collectionview here-->
-        
+    <Grid RowDefinitions="*,auto">
+        <RefreshView x:Name="refreshView">
+            <CollectionView x:Name="charactersCollectionView" SelectionChanged="charactersCollectionView_SelectionChanged">
+                <CollectionView.EmptyView>
+                    <Label Text="Geen data om weer te geven, klik load data"/>
+                </CollectionView.EmptyView>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:MiniFig">
+                        <SwipeView>
+                            <SwipeView.LeftItems>
+                                <SwipeItems>
+                                    <SwipeItem 
+                                    IconImageSource="star.svg"
+                                    Invoked="OnFavoriteSwipeItemInvoked" 
+                                    CommandParameter="{Binding Name}" />
+                                </SwipeItems>
+                            </SwipeView.LeftItems>
+                            <Border Stroke="Black" StrokeThickness="1" Margin="5" Padding="2">
+                                <Grid ColumnDefinitions="*,*" RowDefinitions="*,*">
+                                    <Image Source="{Binding ImageUrl}" Grid.RowSpan="2" WidthRequest="60" HeightRequest="60" Aspect="AspectFill"/>
+                                    <Label Grid.Column="1" TextColor="Black" FontAttributes="Bold" FontSize="Medium" Text="{Binding Name}" VerticalOptions="Center"/>
+                                    <Label Grid.Column="1" Grid.Row="1" TextColor="Black" FontAttributes="Italic" FontSize="Small" Text="{Binding Race}" VerticalOptions="Center"/>
+                                </Grid>
+                            </Border>
+                        </SwipeView>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+                <CollectionView.Footer>
+                    <Label Text="Last refresh @ ..." x:Name="refreshLabel" HorizontalTextAlignment="Center" FontSize="Large" TextColor="LightGray"></Label>
+                </CollectionView.Footer>
+            </CollectionView>
+        </RefreshView>
+        <VerticalStackLayout Spacing="15" Margin="2" Padding="20" Grid.Row="1">
+            <BoxView BackgroundColor="{StaticResource Primary}" HeightRequest="2"/>
+            <Button Text="Load data" Clicked="OnLoadDataClicked"/>
+            <Button Text="Change selection mode" Clicked="OnChangeSelectionModeClicked"/>
+            <Label Text="" x:Name="selectionLabel" FontSize="Medium" TextColor="Orange"/>
+            <Label Text="" x:Name="favouriteLabel" FontSize="Medium" TextColor="Green"/>
+        </VerticalStackLayout>
+
     </Grid>
 
 </ContentPage>
